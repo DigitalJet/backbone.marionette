@@ -5,6 +5,22 @@ show / close them in your application. They use a jQuery selector
 to show your views in the correct place. They also call extra
 methods on your views to facilitate additional functionality.
 
+## Documentation Index
+
+* [Defining An Application Region](#defining-an-application-region)
+* [Initialize A Region With An `el`](#initialize-a-region-with-an-el)
+* [Basic Use](#basic-use)
+* [`reset` A Region](#reset-a-region)
+* [Set How View's `el` Is Attached](#set-how-views-el-is-attached)
+* [Attach Existing View](#attach-existing-view)
+  * [Set `currentView` On Initialization](#set-currentview-on-initialization)
+  * [Call `attachView` On Region](#call-attachview-on-region)
+* [Region Events And Callbacks](#region-events-and-callbacks)
+  * [View Callbacks And Events For Regions](#view-callbacks-and-events-for-regions)
+* [Custom Region Types](#custom-region-types)
+  * [Attaching Custom Region Types](#attaching-custom-region-types)
+  * [Instantiate Your Own Region](#instantiate-your-own-region)
+
 ## Defining An Application Region
 
 Regions can be added to the application by calling the `addRegions` method on
@@ -37,7 +53,7 @@ var mgr = new Backbone.Marionette.Region({
 });
 ```
 
-## Basic Usage
+## Basic Use
 
 Once a region manager has been defined, you can call the `show`
 and `close` methods on it to render and display a view, and then
@@ -152,23 +168,23 @@ MyApp.someRegion.attachView(myView);
 
 ## Region Events And Callbacks
 
-A region manager will raise a few events during it's showing and
+A region manager will raise a few events during its showing and
 closing of views:
 
-* "view:show" - when the view has been rendered and displayed
-* "onShow" - called on the region when the view has been rendered
-* "view:closed" - when the view has been closed
+* "show" / `onShow` - called on the view instance when the view has been rendered and displayed
+* "show" / `onShow` - called on the region instance when the view has been rendered and displayed
+* "close" / `onClose` - when the view has been closed
 
 You can bind to these events and add code that needs to run with
 your region manager, opening and closing views.
 
 ```js
-MyApp.mainRegion.on("view:show", function(view){
+MyApp.mainRegion.on("show", function(view){
   // manipulate the `view` or do something extra
   // with the region manager via `this`
 });
 
-MyApp.mainRegion.on("view:closed", function(view){
+MyApp.mainRegion.on("closed", function(view){
   // manipulate the `view` or do something extra
   // with the region manager via `this`
 });
@@ -180,9 +196,15 @@ MyRegion = Backbone.Marionette.Region.extend({
     // the `view` has been shown
   }
 });
+
+MyView = Marionette.ItemView.extend({
+  onShow: function(){
+    // called when the view has been shown
+  }
+});
 ```
 
-## View Callbacks And Events For Regions
+### View Callbacks And Events For Regions
 
 The region manager will call an `onShow` method on the view
 that was displayed. It will also trigger a "show" event
@@ -204,14 +226,16 @@ view.on("show", function(){
 MyApp.mainRegion.show(view);
 ```
 
-## Defining A Custom Region 
+## Custom Region Types
 
 You can define a custom region manager by extending from
 `Region`. This allows you to create new functionality,
 or provide a base set of functionality for your app.
 
-Once you define a region manager type, you can still call the
-`addRegions` method. Specify the region manager type as the
+### Attaching Custom Region Types
+
+Once you define a region manager type, you can attach the
+new region type by specifying the region type as the
 value - not an instance of it, but the actual constructor
 function.
 
@@ -220,14 +244,33 @@ var FooterRegion = Backbone.Marionette.Region.extend({
   el: "#footer"
 });
 
-MyApp.addRegions({footerRegion: FooterRegion});
+MyApp.addRegions({
+  footerRegion: FooterRegion
+});
 ```
 
-Note that if you define your own `Region` object, you must provide an
-`el` for it. If you don't, you will receive an runtime exception saying that
-an `el` is required.
+You can also specify a selector for the region by using
+an object literal for the configuration.
 
-## Instantiate Your Own Region 
+```js
+var FooterRegion = Backbone.Marionette.Region.extend({
+  el: "#footer"
+});
+
+MyApp.addRegions({
+  footerRegion: {
+    selector: "#footer",
+    type: FooterRegion
+  }
+});
+```
+
+Note that a region must have an element to attach itself to. If you
+do not specify a selector when attaching the region instance to your
+Application or Layout, the region must provide an `el` either in its
+definition or constructor options.
+
+### Instantiate Your Own Region 
 
 There may be times when you want to add a region manager to your
 application after your app is up and running. To do this, you'll

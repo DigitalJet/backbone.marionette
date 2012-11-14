@@ -10,15 +10,21 @@ A return response is expected when making a request.
 Facilitated by [Backbone.Wreqr](https://github.com/marionettejs/backbone.wreqr)'s 
 RequestResponse object.
 
+## Documentation Index
+
+* [Register A Request Handler](#register-a-request-handler)
+* [Request A Response](#request-a-response)
+* [Remove / Replace A Request Handler](#remove--replace-a-request-handler)
+
 ## Register A Request Handler
 
-To register a command, call `App.reqres.register` and provide a name for
+To register a command, call `App.reqres.addHandler` and provide a name for
 the command to handle, and a callback method.
 
 ```js
 var App = new Marionette.Application();
 
-App.reqres.register("foo", function(bar){
+App.reqres.addHandler("foo", function(bar){
   return bar + "-quux";
 });
 ```

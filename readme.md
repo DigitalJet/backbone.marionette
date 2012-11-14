@@ -58,7 +58,7 @@ libraries:
 * [jQuery](http://jquery.com) v1.8.2
 * [Underscore](http://underscorejs.org) v1.4.1
 * [Backbone](http://backbonejs.org) v0.9.2
-* [Backbone.EventBinder](https://github.com/marionettejs/backbone.eventbinder) v0.0.0
+* [Backbone.EventBinder](https://github.com/marionettejs/backbone.eventbinder) v0.1.0
 * [Backbone.Wreqr](https://github.com/marionettejs/backbone.wreqr) v0.0.0
 
 Marionette has not been tested against any other versions of these
@@ -76,23 +76,12 @@ Enderjs users, please let us know of how you solve any compatibility issues.
 
 ## Source Code And Downloads
 
-You can download the raw source code from the "src" folder above, or grab one of the
-many builds from the "lib" folder. 
+You can download the latest builds directly from the "lib" folder above.  
+For more information about the files in this folder, or to obtain an archive
+containing all Marionette dependencies (including Underscore, Backbone, etc),
+please see [the downloads section on the website](http://marionettejs.com#downloads).
 
-To get the latest stable release, use these links which point to the 'master' branch's
-builds:
-
-### Standard Builds
-
-* Development: [backbone.marionette.js](https://raw.github.com/marionettejs/backbone.marionette/master/lib/backbone.marionette.js)
-
-* Production: [backbone.marionette.min.js](https://raw.github.com/marionettejs/backbone.marionette/master/lib/backbone.marionette.min.js)
-
-### RequireJS (AMD) Builds
-
-* Development: [backbone.marionette.js](https://raw.github.com/marionettejs/backbone.marionette/master/lib/amd/backbone.marionette.js)
-
-* Production: [backbone.marionette.min.js](https://raw.github.com/marionettejs/backbone.marionette/master/lib/amd/backbone.marionette.min.js)
+#### [http://marionettejs.com#downloads](http://marionettejs.com#downloads)
 
 ### Marionette.Async Add-on
 
@@ -120,22 +109,23 @@ documentation for each peice of Marionette.
 
 These are the strings that you can pull to make your puppet dance:
 
-* [**Backbone.Marionette.Application**](https://github.com/marionettejs/backbone.marionette/blob/master/docs/marionette.application.md): An application object that starts your app via initializers, and more
-* [**Backbone.Marionette.Module**](https://github.com/marionettejs/backbone.marionette/blob/master/docs/marionette.application.module.md): Create modules and sub-modules within the application
-* [**Backbone.Marionette.AppRouter**](https://github.com/marionettejs/backbone.marionette/blob/master/docs/marionette.approuter.md): Reduce your routers to nothing more than configuration
-* [**Backbone.Marionette.View**](https://github.com/marionettejs/backbone.marionette/blob/master/docs/marionette.view.md): The base View type that other Marionette views extend from (not intended to be used directly)
-* [**Backbone.Marionette.ItemView**](https://github.com/marionettejs/backbone.marionette/blob/master/docs/marionette.itemview.md): A view that renders a single item
-* [**Backbone.Marionette.CollectionView**](https://github.com/marionettejs/backbone.marionette/blob/master/docs/marionette.collectionview.md): A view that iterates over a collection, and renders individual `ItemView` instances for each model
-* [**Backbone.Marionette.CompositeView**](https://github.com/marionettejs/backbone.marionette/blob/master/docs/marionette.compositeview.md): A collection view and item view, for rendering leaf-branch/composite model hierarchies
-* [**Backbone.Marionette.Region**](https://github.com/marionettejs/backbone.marionette/blob/master/docs/marionette.region.md): Manage visual regions of your application, including display and removal of content
-* [**Backbone.Marionette.Layout**](https://github.com/marionettejs/backbone.marionette/blob/master/docs/marionette.layout.md): A view that renders a layout and creates region managers to manage areas within it
-* [**Backbone.Marionette.EventAggregator**](https://github.com/marionettejs/backbone.marionette/blob/master/docs/marionette.eventaggregator.md): An extension of Backbone.Events, to be used as an event-driven or pub-sub tool
-* [**Backbone.Marionette.Commands**](https://github.com/marionettejs/backbone.marionette/blob/master/docs/marionette.commands.md): An extension of Backbone.Wreqr.Commands, a simple command execution framework
-* [**Backbone.Marionette.RequestResponse**](https://github.com/marionettejs/backbone.marionette/blob/master/docs/marionette.requestresponse.md): An extension of Backbone.Wreqr.RequestResponse, a simple request/response framework
-* [**Backbone.Marionette.Renderer**](https://github.com/marionettejs/backbone.marionette/blob/master/docs/marionette.renderer.md): Render templates with or without data, in a consistent and common manner
-* [**Backbone.Marionette.TemplateCache**](https://github.com/marionettejs/backbone.marionette/blob/master/docs/marionette.templatecache.md): Cache templates that are stored in `<script>` blocks, for faster subsequent access
-* [**Backbone.Marionette.Callbacks**](https://github.com/marionettejs/backbone.marionette/blob/master/docs/marionette.callbacks.md): Manage a collection of callback methods, and execute them as needed
-* [**Backbone.Marionette.functions**](https://github.com/marionettejs/backbone.marionette/blob/master/docs/marionette.functions.md): A suite of helper functions and utilities for implementing common Marionette behavior in your objects
+* [**Marionette.Application**](https://github.com/marionettejs/backbone.marionette/blob/master/docs/marionette.application.md): An application object that starts your app via initializers, and more
+* [**Marionette.AppRouter**](https://github.com/marionettejs/backbone.marionette/blob/master/docs/marionette.approuter.md): Reduce your routers to nothing more than configuration
+* [**Marionette.Callbacks**](https://github.com/marionettejs/backbone.marionette/blob/master/docs/marionette.callbacks.md): Manage a collection of callback methods, and execute them as needed
+* [**Marionette.CollectionView**](https://github.com/marionettejs/backbone.marionette/blob/master/docs/marionette.collectionview.md): A view that iterates over a collection, and renders individual `ItemView` instances for each model
+* [**Marionette.Commands**](https://github.com/marionettejs/backbone.marionette/blob/master/docs/marionette.commands.md): An extension of Backbone.Wreqr.Commands, a simple command execution framework
+* [**Marionette.CompositeView**](https://github.com/marionettejs/backbone.marionette/blob/master/docs/marionette.compositeview.md): A collection view and item view, for rendering leaf-branch/composite model hierarchies
+* [**Marionette.Controller**](https://github.com/marionettejs/backbone.marionette/blob/master/docs/marionette.controller.md): A general purpose object for controlling modules, routers, view, and implementing a mediator pattern
+* [**Marionette.EventAggregator**](https://github.com/marionettejs/backbone.marionette/blob/master/docs/marionette.eventaggregator.md): An extension of Backbone.Events, to be used as an event-driven or pub-sub tool
+* [**Marionette.functions**](https://github.com/marionettejs/backbone.marionette/blob/master/docs/marionette.functions.md): A suite of helper functions and utilities for implementing common Marionette behavior in your objects
+* [**Marionette.ItemView**](https://github.com/marionettejs/backbone.marionette/blob/master/docs/marionette.itemview.md): A view that renders a single item
+* [**Marionette.Layout**](https://github.com/marionettejs/backbone.marionette/blob/master/docs/marionette.layout.md): A view that renders a layout and creates region managers to manage areas within it
+* [**Marionette.Module**](https://github.com/marionettejs/backbone.marionette/blob/master/docs/marionette.application.module.md): Create modules and sub-modules within the application
+* [**Marionette.Region**](https://github.com/marionettejs/backbone.marionette/blob/master/docs/marionette.region.md): Manage visual regions of your application, including display and removal of content
+* [**Marionette.Renderer**](https://github.com/marionettejs/backbone.marionette/blob/master/docs/marionette.renderer.md): Render templates with or without data, in a consistent and common manner
+* [**Marionette.RequestResponse**](https://github.com/marionettejs/backbone.marionette/blob/master/docs/marionette.requestresponse.md): An extension of Backbone.Wreqr.RequestResponse, a simple request/response framework
+* [**Marionette.TemplateCache**](https://github.com/marionettejs/backbone.marionette/blob/master/docs/marionette.templatecache.md): Cache templates that are stored in `<script>` blocks, for faster subsequent access
+* [**Marionette.View**](https://github.com/marionettejs/backbone.marionette/blob/master/docs/marionette.view.md): The base View type that other Marionette views extend from (not intended to be used directly)
 
 The following have been extracted in to separate plugins:
 
@@ -189,7 +179,7 @@ for the project.
 ## How To Contribute
 
 If you would like to contribute to Marionette's source code, please read
-the [guidelines for pull requests and contributions](https://github.com/marionettejs/backbone.marionette/wiki/Guidelines-for-pull-requests-and-contributions).
+the [guidelines for pull requests and contributions](https://github.com/marionettejs/backbone.marionette/blob/master/CONTRIBUTING.md).
 Following these guidelines will help make your contributions easier to
 bring in to the next release.
 

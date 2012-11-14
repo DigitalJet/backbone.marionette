@@ -9,14 +9,14 @@ module.exports = function(grunt) {
     pkg: '<json:package.json>',
     meta: {
       version: '<%= pkg.version %>',
-      banner: '/*!\n' +
+      core_banner: '/*!\n' +
               ' * Backbone.Marionette, v<%= meta.version %>\n' +
               ' * Copyright (c)<%= grunt.template.today("yyyy") %> Derick Bailey, Muted Solutions, LLC.\n' +
               ' * Distributed under MIT license\n' +
               ' * http://github.com/marionettejs/backbone.marionette\n' +
               '*/',
-      banner_core :
-        '<%= meta.banner %>\n' +
+      banner :
+        '<%= meta.core_banner %>\n' +
         '/*!\n' +
         ' * Includes Wreqr\n' +
         ' * https://github.com/marionettejs/backbone.wreqr/\n' +
@@ -29,29 +29,42 @@ module.exports = function(grunt) {
       files: ['src/marionette.*.js']
     },
 
-    concat: {
-      core : {
-        src : [
-          'public/javascripts/backbone.eventbinder.js',
-          'public/javascripts/backbone.wreqr.js',
-          'lib/backbone.marionette.js'
-        ],
-        dest : 'lib/bundles/marionette.core.js'
-      }
-    },
-
     rig: {
+      core_build: {
+        src: ['<banner:meta.core_banner>', 'src/build/marionette.core.js'],
+        dest: 'lib/core/backbone.marionette.js'
+      },
+      core_amd: {
+        src: ['<banner:meta.core_banner>', 'src/build/amd.core.js'],
+        dest: 'lib/core/amd/backbone.marionette.js'
+      },
       build: {
-        src: ['<banner:meta.banner>', 'src/marionette.js'],
+        src: ['<banner:meta.banner>', 'src/build/marionette.js'],
         dest: 'lib/backbone.marionette.js'
       },
       amd: {
-        src: ['<banner:meta.banner>', 'src/amd.js'],
+        src: ['<banner:meta.banner>', 'src/build/amd.js'],
         dest: 'lib/amd/backbone.marionette.js'
       }
     },
 
     min: {
+      core_standard: {
+        src: [
+          '<banner:meta.core_banner>',
+          '<config:rig.core_build.dest>'
+        ],
+        dest: 'lib/core/backbone.marionette.min.js'
+      },
+
+      core_amd: {
+        src: [
+          '<banner:meta.core_banner>',
+          '<config:rig.core_amd.dest>'
+        ],
+        dest: 'lib/core/amd/backbone.marionette.min.js'
+      },
+
       standard: {
         src: [
           '<banner:meta.banner>',
@@ -59,13 +72,7 @@ module.exports = function(grunt) {
         ],
         dest: 'lib/backbone.marionette.min.js'
       },
-      bundle_core: {
-        src: [
-          '<banner:meta.banner_core>',
-          '<config:concat.core.dest>'
-        ],
-        dest: 'lib/bundles/marionette.core.min.js'
-      },
+
       amd: {
         src: [
           '<banner:meta.banner>',
@@ -81,13 +88,17 @@ module.exports = function(grunt) {
         'public/javascripts/json2.js',
         'public/javascripts/underscore.js',
         'public/javascripts/backbone.js',
+        'public/javascripts/backbone.augment.js',
         'public/javascripts/backbone.eventbinder.js',
         'public/javascripts/backbone.wreqr.js',
-        'src/marionette.js',
+        'src/build/marionette.core.js',
         'spec/javascripts/support/marionette.support.js',
         'src/marionette.helpers.js',
+        'src/marionette.createObject.js',
         'src/marionette.triggermethod.js',
         'src/marionette.eventbinder.js',
+        'src/marionette.eventaggregator.js',
+        'src/marionette.controller.js',
         'src/marionette.view.js',
         'src/marionette.itemview.js',
         'src/marionette.collectionview.js',
@@ -99,8 +110,7 @@ module.exports = function(grunt) {
         'src/marionette.module.js',
         'src/marionette.templatecache.js',
         'src/marionette.renderer.js',
-        'src/marionette.callbacks.js',
-        'src/marionette.eventaggregator.js'
+        'src/marionette.callbacks.js'
       ],
       helpers : 'spec/javascripts/helpers/*.js',
       specs : 'spec/javascripts/**/*.spec.js'
@@ -137,6 +147,6 @@ module.exports = function(grunt) {
   });
 
   // Default task.
-  grunt.registerTask('default', 'lint rig concat min');
+  grunt.registerTask('default', 'lint rig min');
 
 };

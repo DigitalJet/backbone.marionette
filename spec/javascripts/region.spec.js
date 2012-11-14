@@ -1,4 +1,5 @@
 describe("region", function(){
+  "use strict";
 
   describe("when creating a new region manager and no configuration has been provided", function(){
     it("should throw an exception saying an 'el' is required", function(){
@@ -25,7 +26,7 @@ describe("region", function(){
       }
     });
 
-    var myRegion, view, showEvent, showContext;
+    var myRegion, view, showEvent, showContext, showViewPassed;
 
     beforeEach(function(){
       setFixtures("<div id='region'></div>");
@@ -36,7 +37,8 @@ describe("region", function(){
       myRegion = new MyRegion();
       spyOn(myRegion, "onShow");
 
-      myRegion.on("view:show", function(){
+      myRegion.on("show", function(v){
+        showViewPassed = v === view;
         showEvent = true;
         showContext = this;
       });
@@ -64,6 +66,10 @@ describe("region", function(){
       expect(showEvent).toBeTruthy();
     });
 
+    it("should pass the shown view as an argument for the show event", function(){
+      expect(showViewPassed).toBeTruthy();
+    });
+
     it("should set 'this' to the manager, from the show event", function(){
       expect(showContext).toBe(myRegion);
     });
@@ -83,7 +89,7 @@ describe("region", function(){
       }
     });
 
-    var myRegion, view;
+    var myRegion, view1, view2;
 
     beforeEach(function(){
       setFixtures("<div id='region'></div>");
@@ -118,7 +124,7 @@ describe("region", function(){
       }
     });
 
-    var myRegion, view;
+    var myRegion, view1, view2;
 
     beforeEach(function(){
       setFixtures("<div id='region'></div>");
@@ -161,7 +167,7 @@ describe("region", function(){
       view = new MyView();
       spyOn(view, "close");
       myRegion = new MyRegion();
-      myRegion.on("view:closed", function(){
+      myRegion.on("close", function(){
         closed = true;
         closedContext = this;
       });

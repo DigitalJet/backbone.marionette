@@ -4,39 +4,44 @@ An event aggregator is an application level pub/sub mechanism that allows variou
 pieces of an otherwise segmented and disconnected system to communicate with
 each other. 
 
-Facilitated by [Backbone.Wreqr](https://github.com/marionettejs/backbone.wreqr)'s
-EventAggregator object.
+Marionette's EventAggregator is facilitated by 
+[Backbone.Wreqr](https://github.com/marionettejs/backbone.wreqr)'s
+EventAggregator object and 
+[Backbone.EventBinder](https://github.com/marionettejs/backbone.eventbinder).
+It combines an EventBinder in to the EventAggregator instance.
+
+## Documentation Index
+
+* [Basic Usage](#basic-usage)
+* [BindTo](#bindto)
+* [Decoupling With An Event-Driven Architecture](#decoupling-with-an-event-driven-architecture)
 
 ## Basic Usage
 
-Backbone.Marionette provides an event aggregator with each application instance: 
+Marionette provides an event aggregator with each application instance: 
 `MyApp.vent`. You can also instantiate your own event aggregator:
 
 ```js
-myVent = new Backbone.Marionette.EventAggregator();
+myVent = new Marionette.EventAggregator();
 ```
 
 Passing an object literal of options to the constructor function will extend the
 event aggregator with those options:
 
 ```js
-myVent = new Backbone.Marionette.EventAggregator({foo: "bar"});
+myVent = new Marionette.EventAggregator({foo: "bar"});
 myVent.foo // => "bar"
 ```
 
 ## BindTo
 
-The `EventAggregator` extends from the [`EventBinder`](./marionette.eventbinder.md) object to easily track
+The `EventAggregator` mixes in an [EventBinder](./marionette.eventbinder.md) object to easily track
 and unbind all event callbacks, including inline callback functions. 
 
-The `bindTo` method, though, has been proxied to only take 3 arguments. It assumes
-that the object being bound to is the event aggregator directly, and does not allow
-the bound object to be specified:
-
 ```js
-vent = new Backbone.Marionette.EventAggregator();
+vent = new Marionette.EventAggregator();
 
-vent.bindTo("foo", function(){
+vent.bindTo(vent, "foo", function(){
   alert("bar");
 });
 
@@ -52,9 +57,9 @@ application, ensuring correct decoupling while also facilitating functionality
 that needs more than one of your application's modules.
 
 ```js
-var vent = new Backbone.Marionette.EventAggregator();
+var vent = new Marionette.EventAggregator();
 
-vent.bind("some:event", function(){
+vent.on("some:event", function(){
   alert("Some event was fired!!!!");
 });
   

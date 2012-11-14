@@ -1,3 +1,64 @@
+### v1.0.0-beta5 [view commit logs](https://github.com/marionettejs/backbone.marionette/compare/v1.0.0-beta4...v1.0.0-beta5)
+
+* Modules
+  * Fixed the `startWithParent` option so that you only have to specify `startWithParent: false` once, no matter how many files the module definition is split in to
+
+### v1.0.0-beta4 [view commit logs](https://github.com/marionettejs/backbone.marionette/compare/v1.0.0-beta3...v1.0.0-beta4)
+
+* CollectionView / CompositeView
+  * **BREAKING:** Changed when the `itemViewOptions` gets called, in order to simplify the `buildItemView` method and make it easier to override
+  * **BREAKING:** The `storeChild` method now requires an instance of the item being rendered, as well as the view that was rendered for it
+
+* CompositeView / templateHelpers
+  * **BREAKING:** Fixed the `CompositeView` so that `serializeData` is no longer responsible for mixing in the `templateHelpers`
+
+* Controller
+  * Added a very basic `Marionette.Controller` object, and basic documentation for it
+
+* Marionette.getOption
+  * Added a convience method to get an object's options either from the object directly, or from it's `this.options`, with `this.options` taking precedence
+  * Converted use of `this.options` to use `Marionette.getOption` through most of the code
+
+* Marionette.createObject
+  * Added a convience method to create an object that inherits from another, as a wrapper / shim around `Object.create`
+
+### v1.0.0-beta3 [view commit logs](https://github.com/marionettejs/backbone.marionette/compare/v1.0.0-beta2...v1.0.0-beta3)
+
+* Region
+  * Fixed "show" method so that it includes the view instance being shown, again
+
+### v1.0.0-beta2 [view commit logs](https://github.com/marionettejs/backbone.marionette/compare/v1.0.0-beta1...v1.0.0-beta2)
+
+* templateHelpers
+  * **BREAKING:** Changed when the templateHelpers is mixed in to the data for a view, so that it is no longer dependent on the `serializeData` implementation
+
+* Region
+  * **BREAKING:** Changed "view:show" event to "show"
+  * **BREAKING:** Changed "view:closed" event to "close"
+  * All region events and events that the triggers from a view are now triggered via Marionette.triggerMethod.
+
+* Marionette.EventAggregator
+  * **BREAKING:** The `bindTo` method no longer assumes you are binding to the EventAggregator instance. You must specify the object that is triggering the event: `ea.bindto(ea, "event", callback, context)`
+  * Marionette.EventAggregator combines Backbone.Wreqr.EventAggregator with Backbone.EventBinder, allowing the event aggregator to act as it's own event binder
+
+* CollectionView
+  * Fixed bug where adding an item to a collection would not allow the CollectionView to propagate the itemView's events
+  * Allow `itemViewOptions` to be specified in CollectionView constructor options
+
+* Application
+  * The events triggered from the Application object instance are now triggered with corresponding "on{EventName}" method calls
+
+* Backbone.EventBinder
+  * Updated to v0.1.0 of Backbone.EventBinder, allowing for jQuery/DOM events to be handled within the EventBinder instances / `bindTo` methods
+
+* AMD Wrapper
+  * The "core" AMD wrapper specifies Backbone.Wreqr and Backbone.EventBinder
+  * The "standard" AMD wrapper does not specify Backbone.Wreqr / EventBinder, as these are built in
+
+* Build / downloads
+  * The standard and AMD versions of `backbone.marionette.js` and `backbone.marionette.min.js` include all dependencies (EventBinder, Wreqr)
+  * The "core" versions of `backbone.marionette.js` and `backbone.marionette.min.js` do not include any dependencies (EventBinder, Wreqr)
+
 ### v1.0.0-beta1 [view commit logs](https://github.com/marionettejs/backbone.marionette/compare/v0.10.2...v1.0.0-beta1)
 
 * Backbone.EventBinder

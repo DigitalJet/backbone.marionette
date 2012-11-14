@@ -26,6 +26,17 @@ new CompositeView({
 For more examples, see my blog post on 
 [using the composite view](http://lostechies.com/derickbailey/2012/04/05/composite-views-tree-structures-tables-and-more/)
 
+## Documentation Index
+
+* [Composite Model `template`](#composite-model-template)
+* [CompositeView's `itemViewContainer`](#compositeviews-itemviewcontainer)
+* [CompositeView's `appendHtml`](#compositeviews-appendhtml)
+* [Recursive By Default](#recursive-by-default)
+* [Model And Collection Rendering](#model-and-collection-rendering)
+* [Events And Callbacks](#events-and-callbacks)
+* [Organizing ui elements](#organizing-ui-elements)
+* [modelEvents and collectionEvents](#modelevents-and-collectionevents)
+
 ## Composite Model `template`
 
 When a `CompositeView` is rendered, the `model` will be rendered
@@ -183,11 +194,12 @@ You can also manually re-render either or both of them:
 ## Events And Callbacks
 
 During the course of rendering a composite, several events will
-be triggered:
+be triggered. These events are triggered with the [Marionette.triggerMethod](./marionette.functions.md)
+function, which calls a corresponding "on{EventName}" method on the view.
 
-* "composite:item:rendered" - after the `modelView` has been rendered
-* "composite:collection:rendered" - after the collection of models has been rendered
-* "render" / "composite:rendered" - after everything has been rendered
+* "composite:item:rendered" / `onCompositeItemRendered` - after the `modelView` has been rendered
+* "composite:collection:rendered" / `onCompositeCollectionRendered` - after the collection of models has been rendered
+* "render" / `onRender` and "composite:rendered" / `onCompositeRendered` - after everything has been rendered
 
 Additionally, after the composite view has been rendered, an 
 `onRender` method will be called. You can implement this in 
@@ -212,6 +224,23 @@ template, not those belonging to the collection.
 
 The ui elements will be accessible as soon as the composite view
 template is rendered (and before the collection is rendered),
-which means you can even access them in the `beforeRender` method.
+which means you can even access them in the `onBeforeRender` method.
 
+## modelEvents and collectionEvents
 
+CompositeViews can bind directly to model events and collection events
+in a declarative manner:
+
+```js
+Marionette.CompositeView.extend({
+  modelEvents: {
+    "change": "modelChanged"
+  },
+
+  collectionEvents: {
+    "add": "modelAdded"
+  }
+});
+```
+
+For more information, see the [Marionette.View](./marionette.view.md) documentation.
