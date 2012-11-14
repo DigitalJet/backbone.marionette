@@ -5,6 +5,32 @@ specified collection, render each of them using a specified `itemView`,
 then append the results of the item view's `el` to the collection view's
 `el`.
 
+## Documentation Index
+
+* [CollectionView's `itemView`](#collectionviews-itemview)
+* [CollectionView's `itemViewOptions`](#collectionviews-itemviewoptions)
+* [CollectionView's `emptyView`](#collectionviews-emptyview)
+* [CollectionView's `buildItemView`](#collectionviews-builditemview)
+* [Callback Methods](#callback-methods)
+  * [onBeforeRender callback](#beforerender-callback)
+  * [onRender callback](#onrender-callback)
+  * [onItemAdded callback](#onitemadded-callback)
+  * [onBeforeClose callback](#beforeclose-callback)
+  * [onClose callback](#onclose-callback)
+* [CollectionView Events](#collectionview-events)
+  * ["before:render" / onBeforeRender event](#beforerender--onbeforerender-event)
+  * ["render" / onRender event](#render--onrender-event)
+  * ["before:close" / onBeforeClose event](#beforeclose--onbeforeclose-event)
+  * ["closed" / "collection:closed" event](#closed--collectionclosed-event)
+  * ["item:added" / onItemAdded](#itemadded--onitemadded)
+  * ["item:removed" / onItemRemoved](#itemremoved--onitemremoved)
+  * ["itemview:\*" event bubbling from child views](#itemview-event-bubbling-from-child-views)
+* [CollectionView render](#collectionview-render)
+* [CollectionView: Automatic Rendering](#collectionview-automatic-rendering)
+* [CollectionView: Re-render Collection](#collectionview-re-render-collection)
+* [CollectionView's appendHtml](#collectionviews-appendhtml)
+* [CollectionView close](#collectionview-close)
+
 ## CollectionView's `itemView`
 
 Specify an `itemView` in your collection view definition. This must be
@@ -107,6 +133,24 @@ Backbone.Marionette.CollectionView.extend({
 This will render the `emptyView` and display the message that needs to
 be displayed when there are no items.
 
+## CollectionView's `buildItemView`
+
+When a custom view instance needs to be created for the `itemView` that
+represents an item, override the `buildItemView` method. This method
+takes three parameters and returns a view instance to be used as the
+item view.
+
+```js
+buildItemView: function(item, ItemViewType, itemViewOptions){
+  // build the final list of options for the item view type
+  var options = _.extend({model: item}, itemViewOptions);
+  // create the item view instance
+  var view = new ItemViewType(options);
+  // return it
+  return view;
+},
+```
+
 ## Callback Methods
 
 There are several callback methods that can be provided on a
@@ -114,14 +158,14 @@ There are several callback methods that can be provided on a
 view's base methods. These callback methods are intended to be
 handled within the view definition directly.
 
-### beforeRender callback
+### onBeforeRender callback
 
-A `beforeRender` callback will be called just prior to rendering
+A `onBeforeRender` callback will be called just prior to rendering
 the collection view.
 
 ```js
 Backbone.Marionette.CollectionView.extend({
-  beforeRender: function(){
+  onBeforeRender: function(){
     // do stuff here
   }
 });
@@ -155,13 +199,13 @@ Backbone.Marionette.CollectionView.extend({
 });
 ```
 
-### beforeClose callback
+### onBeforeClose callback
 
 This method is called just before closing the view.
 
 ```js
 Backbone.Marionette.CollectionView.extend({
-  beforeClose: function(){
+  onBeforeClose: function(){
     // do stuff here
   }
 });
@@ -182,28 +226,32 @@ Backbone.Marionette.CollectionView.extend({
 ## CollectionView Events
 
 There are several events that will be triggered during the life
-of a collection view. These are intended to be handled from code
-external to the view.
+of a collection view. Each of these events is called with the
+[Marionette.triggerMethod](./marionette.functions.md) function,
+which calls a corresponding "on{EventName}" method on the
+view instance.
 
-### "collection:before:render" event
+### "before:render" / onBeforeRender event
 
-Triggers just prior to the view being rendered
+
+Triggers just prior to the view being rendered. Also triggered as 
+"collection:before:render" / `onCollectionBeforeRender`.
 
 ```js
 MyView = Backbone.Marionette.CollectionView.extend({...});
 
 var myView = new MyView();
 
-myView.on("collection:before:render", function(){
+myView.on("before:render", function(){
   alert("the collection view is about to be rendered");
 });
 
 myView.render();
 ```
 
-### "render" / "collection:rendered" event
+### "render" / onRender event
 
-A "collection:rendered" event will also be fired. This allows you to
+A "collection:rendered" / `onCollectionRendered` event will also be fired. This allows you to
 add more than one callback to execute after the view is rendered,
 and allows parent views and other parts of the application to
 know that the view was rendered.
@@ -224,9 +272,10 @@ myView.on("collection:rendered", function(){
 myView.render();
 ```
 
-### "collection:before:close" event
+### "before:close" / onBeforeClose event
 
-Triggered just before closing the view.
+Triggered just before closing the view. A "collection:before:close" /
+`onCollectionBeforeClose` event will also be fired
 
 ```js
 MyView = Backbone.Marionette.CollectionView.extend({...});
@@ -240,9 +289,10 @@ myView.on("collection:before:close", function(){
 myView.close();
 ```
 
-### "collection:closed" event
+### "closed" / "collection:closed" event
 
-Triggered just after closing the view.
+Triggered just after closing the view, both with corresponding
+method calls.
 
 ```js
 MyView = Backbone.Marionette.CollectionView.extend({...});
@@ -254,6 +304,30 @@ myView.on("collection:closed", function(){
 });
 
 myView.close();
+```
+
+### "item:added" / onItemAdded
+
+Triggered just after creating a new itemView instance for an
+item that was added to the collection, but before the
+view is rendered and added to the DOM.
+
+```js
+cv.on("item:added", function(viewInstance){
+  // ...
+});
+```
+
+### "item:removed" / onItemRemoved
+
+Triggered after an itemView instance has been closed and
+removed, when it's item was deleted or removed from the
+collection.
+
+```js
+cv.on("item:removed", function(viewInstance){
+  // ...
+});
 ```
 
 ### "itemview:\*" event bubbling from child views
@@ -388,5 +462,3 @@ Backbone.Marionette.CollectionView.extend({
   }
 });
 ```
-
-

@@ -1,4 +1,5 @@
 describe("collection view", function(){
+  "use strict";
 
   // Shared View Definitions
   // -----------------------
@@ -168,6 +169,31 @@ describe("collection view", function(){
     });
   });
 
+  describe("when rendering and an 'itemViewOptions' is provided at construction time", function(){
+    var CollectionView = Backbone.Marionette.CollectionView.extend({
+      itemView: ItemView
+    });
+
+    var collection = new Backbone.Collection([{foo: "bar"}]);
+    var collectionView, view;
+
+    beforeEach(function(){
+      collectionView = new CollectionView({
+        collection: collection,
+        itemViewOptions: {
+          foo: "bar"
+        }
+      });
+
+      collectionView.render();
+      view = _.values(collectionView.children)[0];
+    });
+
+    it("should pass the options to every view instance", function(){
+      expect(view.options.hasOwnProperty("foo")).toBe(true);
+    });
+  });
+
   describe("when rendering a collection view without a collection", function(){
     var collectionView;
 
@@ -189,120 +215,6 @@ describe("collection view", function(){
     it("should not reference any view items", function(){
       expect(_.size(collectionView.children)).toBe(0);
     });
-  });
-
-  describe("emptyView", function(){
-
-    var EmptyView = Backbone.Marionette.ItemView.extend({
-      tagName: "span",
-      className: "isempty",
-      render: function(){}
-    });
-
-    var EmptyCollectionView = Backbone.Marionette.CollectionView.extend({
-      itemView: ItemView,
-      emptyView: EmptyView
-    });
-
-    describe("when rendering a collection view with an empty collection", function(){
-
-      var collectionView;
-
-      beforeEach(function(){
-        var collection = new Backbone.Collection();
-        collectionView = new EmptyCollectionView({
-          collection: collection
-        });
-
-        collectionView.render();
-      });
-
-      it("should append the html for the emptyView", function(){
-        expect($(collectionView.$el)).toHaveHtml("<span class=\"isempty\"></span>");
-      });
-
-      it("should reference each of the rendered view items", function(){
-        expect(_.size(collectionView.children)).toBe(1);
-      });
-    });
-
-    describe("when the emptyView has been rendered for an empty collection, then adding an item to the collection", function(){
-      var collectionView, closeSpy;
-
-      beforeEach(function(){
-        var collection = new Backbone.Collection();
-        collectionView = new EmptyCollectionView({
-          collection: collection
-        });
-
-        collectionView.render();
-
-        closeSpy = spyOn(EmptyView.prototype, "close");
-
-        collection.add({foo: "wut"});
-      });
-
-      it("should close the emptyView", function(){
-        expect(closeSpy).toHaveBeenCalled();
-      });
-
-      it("should show the new item", function(){
-        expect(collectionView.$el).toHaveText(/wut/);
-      });
-    });
-
-    describe("when the emptyView has been rendered for an empty collection and then collection reset, recieving some values. Then adding an item to the collection", function () {
-      var collectionView, closeSpy;
-
-      beforeEach(function () {
-        var collection = new Backbone.Collection();
-        collectionView = new EmptyCollectionView({
-          collection: collection
-        });
-
-        collectionView.render();
-
-        closeSpy = spyOn(EmptyView.prototype, "close");
-        closeSpy.andCallThrough();
-
-        collection.reset([{ foo: "bar" }, { foo: "baz"}]);
-
-        collection.add({ foo: "wut" });
-      });
-
-      it("should close the emptyView", function () {
-        expect(closeSpy).toHaveBeenCalled();
-      });
-
-      it("should show all three items without empty view", function () {
-        expect($(collectionView.$el)).toHaveHtml("<span>bar</span><span>baz</span><span>wut</span>");
-      });
-    });
-
-    describe("when the last item is removed from a collection", function(){
-      var collectionView, closeSpy;
-
-      beforeEach(function(){
-        var collection = new Backbone.Collection([{foo: "wut"}]);
-
-        collectionView = new EmptyCollectionView({
-          collection: collection
-        });
-
-        collectionView.render();
-
-        collection.remove(collection.at(0));
-      });
-
-      it("should append the html for the emptyView", function(){
-        expect($(collectionView.$el)).toHaveHtml("<span class=\"isempty\"></span>");
-      });
-
-      it("should reference each of the rendered view items", function(){
-        expect(_.size(collectionView.children)).toBe(1);
-      });
-    });
-
   });
 
   describe("when a collection is reset after the view is loaded", function(){
@@ -618,6 +530,45 @@ describe("collection view", function(){
     });
   });
 
+  describe("when a child view triggers default events", function(){
+    var model = new Backbone.Model({foo: "bar"});
+    var collection = new Backbone.Collection([model]);
+    var collectionView;
+    var eventNames = [];
+
+    beforeEach(function(){
+      collectionView = new CollectionView({
+        itemView: Backbone.Marionette.ItemView.extend({
+            template: function() { return '<%= foo %>'; }
+        }),
+        collection: collection
+      });
+
+      collectionView.on("all", function(){
+        var eventName = arguments[0];
+
+        eventNames.push(eventName);
+      });
+
+      collectionView.render();
+    });
+
+    it("should bubble up through the parent collection view", function(){
+      expect(eventNames).toBeDefined();
+      expect(eventNames).toEqual([
+          'before:render',
+          'collection:before:render',
+          'item:added',
+          'itemview:before:render',
+          'itemview:item:before:render',
+          'itemview:render',
+          'itemview:item:rendered',
+          'render',
+          'collection:rendered'
+      ]);
+    });
+  });
+
   describe("when a child view is removed from a collection view", function(){
     var model;
     var collection;
@@ -722,6 +673,31 @@ describe("collection view", function(){
 
     it("should call the child's 'onShow' method with itself as the context", function(){
       expect(viewOnShowContext).toBe(view);
+    });
+  });
+
+  describe("when setting an itemView in the constructor options", function(){
+    var IV = Marionette.ItemView.extend({
+      template: function(){},
+      MyItemView: true
+    });
+
+    var iv;
+
+    beforeEach(function(){
+      var c = new Backbone.Collection([{a: "b"}]);
+      var cv = new Marionette.CollectionView({
+        itemView: IV,
+        collection: c,
+      });
+
+      cv.render();
+
+      iv = cv.children[c.at(0).cid];
+    });
+    
+    it("should use the specified itemView for each item", function(){
+      expect(iv.MyItemView).toBe(true);
     });
   });
 

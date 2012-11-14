@@ -10,15 +10,21 @@ scenario.
 Facilitated by [Backbone.Wreqr](https://github.com/marionettejs/backbone.wreqr)'s 
 Commands object.
 
+## Documentation Index
+
+* [Register A Command](#register-a-command)
+* [Execute A Command](#execute-a-command)
+* [Remove / Replace Commands](#remove--replace-commands)
+
 ## Register A Command
 
-To register a command, call `App.commands.register` and provide a name for
+To register a command, call `App.commands.addHandler` and provide a name for
 the command to handle, and a callback method.
 
 ```js
 var App = new Marionette.Application();
 
-App.commands.register("foo", function(bar){
+App.commands.addHandler("foo", function(bar){
   console.log(bar);
 });
 ```
